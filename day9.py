@@ -46,8 +46,3 @@ print(sum(low_point_values))
 
 basins = [bfs(low_point, grid) for low_point in low_points]
 print(reduce((lambda x, y: x * y), sorted(basins, reverse=True)[0:3]))
-
-
-
-
-

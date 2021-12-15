@@ -3,11 +3,11 @@ with open('resources/day6_input.txt') as f:
 # school = [3, 4, 3, 1, 2]
 
 for i in range(0, 80):
-    for i in range(len(school)):
-        if school[i] > 0:
-            school[i] -= 1
+    for j in range(len(school)):
+        if school[j] > 0:
+            school[j] -= 1
         else:
-            school[i] = 6
+            school[j] = 6
             school.append(8)
 
 print(len(school))

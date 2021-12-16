@@ -1,6 +1,3 @@
-with open('resources/day11_input.txt') as f:
-    matrix = [[int(y) for y in line.strip()] for line in f.readlines()]
-
 dirs = [[-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1]]
 
 
@@ -22,23 +19,35 @@ def set_zeros(matrix, visited):
         matrix[v[0]][v[1]] = 0
 
 
-total_flashes = 0
-for _ in range(100):
-    flashed = []
-    visited = []
-    flashes = 0
-    for row in range(len(matrix)):
-        for col in range(len(matrix[0])):
-            matrix[row][col] += 1
-            if matrix[row][col] > 9:
-                flashed.append([row, col])
-                visited.append([row, col])
+def solve(matrix, steps=100):
+    total_flashes = 0
+    for _ in range(steps):
+        flashed = []
+        visited = []
+        flashes = 0
+        for row in range(len(matrix)):
+            for col in range(len(matrix[0])):
+                matrix[row][col] += 1
+                if matrix[row][col] > 9:
+                    flashed.append([row, col])
+                    visited.append([row, col])
 
-    while flashed:
-        increment_neighbors(matrix, flashed.pop(), flashed, visited)
-        flashes += 1
+        while flashed:
+            increment_neighbors(matrix, flashed.pop(), flashed, visited)
+            flashes += 1
+        if len(visited) == 100:
+            return _ + 1
+        total_flashes += flashes
+        set_zeros(matrix, visited)
 
-    total_flashes += flashes
-    set_zeros(matrix, visited)
+    return total_flashes
 
-print(total_flashes)
+# part 1
+with open('resources/day11_input.txt') as f:
+    matrix = [[int(y) for y in line.strip()] for line in f.readlines()]
+print(solve(matrix))
+
+# part 2
+with open('resources/day11_input.txt') as f:
+    matrix = [[int(y) for y in line.strip()] for line in f.readlines()]
+print(solve(matrix, 1000000))

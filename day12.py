@@ -7,24 +7,42 @@ with open('resources/day12_input.txt') as f:
         graph[n1].append(n2)
         graph[n2].append(n1)
 
-# part 1
-def traverse(graph):
+
+def count_visits(node, path):
+    count = 0
+    for p in path:
+        if node == p:
+            count += 1
+    return count
+
+
+def traverse(graph, twice=''):
     paths = []
 
     def _traverse(cave, current_path=["start"]):
-        for path in cave:
-            if path.islower() and path in current_path:
+        for node in cave:
+            if node.islower() and node in current_path and node != twice:
                 continue
-            elif path == 'end':
-                current_path.append(path)
+            elif node == twice and count_visits(node, current_path) > 1:
+                continue
+            elif node == 'end':
+                current_path.append(node)
                 paths.append(current_path[:])
                 current_path.pop()
             else:
-                current_path.append(path)
-                _traverse(graph[path], current_path)
+                current_path.append(node)
+                _traverse(graph[node], current_path)
         current_path.pop()
+        return
+
     _traverse(graph.get("start"))
-    return len(paths)
+    return paths
 
+# part 1
+print(len(traverse(graph)))
 
-print(traverse(graph))
+# part 2
+paths = []
+for x in (filter(lambda k: k.islower() and k != 'start' and k != 'end', graph.keys())):
+    paths.extend(traverse(graph, x))
+print(len(set(tuple(x) for x in paths)))

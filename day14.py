@@ -4,17 +4,17 @@ from functools import cache
 rules = {}
 with open("resources/day14_input.txt") as f:
     polymer = f.readline().strip()
-    f.readline()           
+    f.readline()
     for line in f.readlines():
         p, i = line.strip().split(" -> ")
         rules[p] = i
 
 @cache
-def mutate(a, b, depth):
-    if depth == 0:
+def mutate(a, b, steps):
+    if steps == 0:
         return Counter('')
     x = rules[a+b]
-    return Counter(x) + mutate(a, x, depth-1) + mutate(x, b, depth-1)
+    return Counter(x) + mutate(a, x, steps-1) + mutate(x, b, steps-1)
 
 
 # part 1

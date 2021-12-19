@@ -1,27 +1,30 @@
 from collections import defaultdict, Counter
+from functools import cache
 
-rules = defaultdict(str)
+rules = {}
 with open("resources/day14_input.txt") as f:
     polymer = f.readline().strip()
-    f.readline()            # consume blank
+    f.readline()           
     for line in f.readlines():
         p, i = line.strip().split(" -> ")
         rules[p] = i
 
+@cache
+def mutate(a, b, depth):
+    if depth == 0:
+        return Counter('')
+    x = rules[a+b]
+    return Counter(x) + mutate(a, x, depth-1) + mutate(x, b, depth-1)
 
-def mutate(polymer):
-    new_polymer = ""
-    for i in range(len(polymer) - 1):
-        pair = polymer[i]+polymer[i+1]
-        new_polymer += polymer[i] + rules[pair]
-    return new_polymer + polymer[-1]
 
+# part 1
+counter = Counter(polymer)
+for i in range(len(polymer) - 1):
+    counter.update(mutate(polymer[i], polymer[i+1], 10))
+print(max(counter.values()) - min(counter.values()))
 
-for i in range(10):
-    polymer = mutate(polymer)
-
-counts = Counter(polymer)
-high = max(counts, key=counts.get)
-low = min(counts, key=counts.get)
-
-print(counts[high] - counts[low])
+# part 2
+counter = Counter(polymer)
+for i in range(len(polymer) - 1):
+    counter.update(mutate(polymer[i], polymer[i+1], 40))
+print(max(counter.values()) - min(counter.values()))

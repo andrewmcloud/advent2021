@@ -46,7 +46,7 @@ def dijkstra(cavern, graph, start):
     visited = set()
     priorityq = []
     costs = defaultdict(lambda: float('inf'))
-    
+
     costs[start] = 0
     heap.heappush(priorityq, (0, start))
 
